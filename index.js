@@ -49,7 +49,7 @@ function getUserLocation() {
 
 const fetchData = (lat, lon) => {
     const apiKey = '631fc5646580178e0db09ba1613eca0f'
-    const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`
+    const api = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
 
     fetch(api).then(res => res.json()).then(data => {
         console.log(data)
@@ -72,7 +72,7 @@ const fetchData = (lat, lon) => {
 
         const windSpeed = document.createElement('div')
         windSpeed.classList.add('data')
-        windSpeed.textContent = `Wind Speed: ${wind.speed}`;
+        windSpeed.textContent = `Wind Speed: ${wind.speed}Kmph`;
 
         const humidity = document.createElement('div')
         humidity.classList.add('data')
@@ -84,15 +84,15 @@ const fetchData = (lat, lon) => {
 
         const pressure = document.createElement('div')
         pressure.classList.add('data')
-        pressure.textContent = `Pressure:${main.pressure}`
+        pressure.textContent = `Pressure:${main.pressure}atm`
 
         const direction = document.createElement('div')
         direction.classList.add('data')
-        direction.textContent = `Wind Direction: ${wind.deg}`
+        direction.textContent = `Wind Direction: ${getWindDirection(wind.deg)}`
 
         const feelslike = document.createElement('div')
         feelslike.classList.add('data')
-        feelslike.textContent = `Feels Like: ${main.feels_like}`
+        feelslike.textContent = `Feels Like: ${main.feels_like} Deg C`
 
         dataContainer.appendChild(location)
         dataContainer.appendChild(windSpeed)
@@ -115,5 +115,11 @@ const fetchData = (lat, lon) => {
 
 const navigateToNextPage = () =>{
     window.location.href = './fetchDataPage.html'
+}
+
+function getWindDirection(degrees) {
+    const directions = ["North", "Northeast", "East", "Southeast", "South", "Southwest", "West", "Northwest"];
+    const index = Math.round(degrees / 45) % 8; // Divide by 45 degrees and take the modulo to get the index
+    return directions[index];
 }
 
